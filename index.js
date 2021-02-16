@@ -6,15 +6,28 @@ let buttonsContainer = document.getElementById('buttons-container')
 //composing the store
 //the store is an object with TWO important functions - one is a function to getState and the other is a function called dispatch
 
+//createStore function
+
+let initialState = {pennies: 0, nickels: 0, dimes: 0, quarters: 0}
+
+//THIS IS BASICALLY ALL REDUX IS: THIS LITTLE FUNCTION!
+function createStore(reducer, initialState){
+  let state = initialState
+  return {
+    dispatch: function(action){
+      state = reducer(state, action)
+    },
+    getState: function(){
+      return {...state}
+    }
+  }
+}
+
 //We should never update the state directly
 
 //We let Redux know before the application compiles the valid ways that a store can change
 //We're restricting the kinds of changes that can be made to state inside of what is a called a reducer
 //this.setState({pennies: pS.pennies + 1})
-
-//createStore function
-
-let initialState = {pennies: 0, nickels: 0, dimes: 0, quarters: 0}
 
 const coinReducer = function(state = initialState, action){
   switch(action.type){
@@ -35,23 +48,10 @@ const coinReducer = function(state = initialState, action){
   }
 }
 
-//THIS IS BASICALLY ALL REDUX IS: THIS LITTLE FUNCTION!
-function createStore(reducer, initialState){
-  let state = initialState
-  return {
-    dispatch: function(action){
-      state = reducer(state, action)
-    },
-    getState: function(){
-      return {...state}
-    }
-  }
-}
-
 let store = createStore(coinReducer, initialState)
 
 //Actions are plain objects that generally have a key of "TYPE" that has a value of a string that tells the state HOW to change
-//ActionCREATORS are functions that RETURN actions
+//ActionCREATORS are functions that RETURN actions, and they are function because sometimes the object we want to pass to the reducer needs extra information
 //We want to have action creators for every possible type of state change
 
 function addPenny(){ //ACTION CREATOR is the function itself
@@ -117,31 +117,3 @@ function render(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
